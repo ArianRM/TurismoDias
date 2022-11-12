@@ -13,7 +13,7 @@ using namespace std;
 class Consola {
 private:
     User* new_user;
-    vector<User*> vecUsers;
+    vector<User*> vecUsers; // cambiar por arbol
     UsersFileManager* uFile;
     BusFileManager* bFile;
     DLL <Bus*> BusList;
@@ -137,6 +137,8 @@ public:
             cout << "[1] Buscar buses" << endl;
             cout << "[2] Ver saldo de cuenta" << endl;
             cout << "[3] Ver cuenta" << endl;
+            cout << "[4] Arbol de usuarios" << endl;
+            cout << "[5] Hash Table" << endl;
             cout << "[4] Generar usuarios aleatoriamente" << endl;
             cout << "[5] SALIR" << endl;
             cin >> opcion;
@@ -162,6 +164,7 @@ public:
                 cout << "Ingrese la cantidad de usuarios que desea generar: ";
                 cin >> nUser;
                 Dataset_Generator(nUser);
+                uFile->writeUserFile(vecUsers);
                 cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
             }
         } while (opcion!=5);

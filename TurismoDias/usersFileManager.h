@@ -13,7 +13,7 @@ public:
     UsersFileManager() {}
 	~UsersFileManager(){}
 
-	void writeUserFile(vector<User*> vecUsers) {
+	void writeUserFile(vector<User*> vecUsers) { // cambiar por el arbol
         ofstream file;
         file.open("users.txt", ios::app);
         if (file.fail()) {
