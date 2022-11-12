@@ -9,6 +9,7 @@
 #include "Classes.h"
 #include "DLL.h"
 using namespace std;
+
 class Consola {
 private:
     User* new_user;
@@ -129,13 +130,15 @@ public:
     }
 
     void home(User *new_user) {
+        int nUser;
         int opcion;
         do {
             cout << "\t\t[BIENVENIDO " << new_user->getFirstName() << "]" << endl;
             cout << "[1] Buscar buses" << endl;
             cout << "[2] Ver saldo de cuenta" << endl;
             cout << "[3] Ver cuenta" << endl;
-            cout << "[4] SALIR" << endl;
+            cout << "[4] Generar usuarios aleatoriamente" << endl;
+            cout << "[5] SALIR" << endl;
             cin >> opcion;
             system("cls");
             switch (opcion){
@@ -155,7 +158,35 @@ public:
                 cout << "[Fecha de nacimiento: " << new_user->getDateofBirth() << "]" << endl;
                 cout << "[DNI: " << new_user->getDni() << "]" << endl;          
                 break;
+            case 4: 
+                cout << "Ingrese la cantidad de usuarios que desea generar: ";
+                cin >> nUser;
+                Dataset_Generator(nUser);
+                cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
             }
-        } while (opcion!=4);
+        } while (opcion!=5);
+    }
+
+    // USUARIO DATASET GENERATOR
+    void Dataset_Generator(int n) {
+        string pMethod[2] = { "tarjeta","efectivo" };
+        
+        for (int i = 0; i < n; i++) {
+            int dni = rand() % 100000000 + 999999;
+            int money = rand() % 1000 + 20;
+            string pay = pMethod[rand()%2];
+            if (vecUsers.size() > 30000)
+                break;
+            User* cuenta = new User(
+                    "Usuario" + to_string(vecUsers.size()),
+                    "1234",
+                    "NombreUsuario" + to_string(vecUsers.size()),
+                    "ApellidoUsuario" + to_string(vecUsers.size()),
+                    "16/12/90",
+                    pay,
+                    dni,
+                    money);
+            vecUsers.push_back(cuenta);
+        }
     }
 };
