@@ -919,3 +919,11 @@ ApellidoUsuario100
 1002153
 efectivo
 741
+diego
+20201
+diego
+sanchez
+112033
+5345000
+efectivo
+1000
