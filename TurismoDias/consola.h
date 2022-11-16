@@ -7,6 +7,7 @@
 #include "usersFileManager.h"
 #include "busFileManager.h"
 #include "Classes.h"
+#include "DATA_GEN.h"
 #include "DLL.h"
 using namespace std;
 
@@ -17,6 +18,7 @@ private:
     UsersFileManager* uFile;
     BusFileManager* bFile;
     DLL <Bus*> BusList;
+    DATA_GEN generator;
 public:
     Consola() {
         BusList = DLL<Bus*>();
@@ -130,16 +132,14 @@ public:
     }
 
     void home(User *new_user) {
-        int nUser;
+
         int opcion;
         do {
-            cout << "\t\t[BIENVENIDO " << new_user->getFirstName() << "]" << endl;
-            cout << "[1] Buscar buses" << endl;
-            cout << "[2] Ver saldo de cuenta" << endl;
-            cout << "[3] Ver cuenta" << endl;
-            cout << "[4] Arbol de usuarios" << endl;
-            cout << "[5] Hash Table" << endl;
-            cout << "[4] Generar usuarios aleatoriamente" << endl;
+            cout << "\t //////[BIENVENIDO " << new_user->getFirstName() << "]//////" << endl;
+            cout << "[1] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
+            cout << "[2] Ver Usuarios" << endl; // ARBOL BINARIO DE USUARIOS
+            cout << "[3] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
+            cout << "[4] Generar usuarios aleatoriamente" << endl; // GENERADOR DE DATASET ALEATORIO DE USUARIOS
             cout << "[5] SALIR" << endl;
             cin >> opcion;
             system("cls");
@@ -161,35 +161,16 @@ public:
                 cout << "[DNI: " << new_user->getDni() << "]" << endl;          
                 break;
             case 4: 
-                cout << "Ingrese la cantidad de usuarios que desea generar: ";
-                cin >> nUser;
-                Dataset_Generator(nUser);
-                uFile->writeUserFile(vecUsers);
+                int nUser;
+                do{
+                    cout << "Ingrese la cantidad de usuarios que desea generar (hasta 10^6): ";
+                    cin >> nUser;
+                } while (nUser < 0 || nUser > 1000000);
+                for (int i = 0; i < nUser; i++)
+                    vecUsers.push_back(generator.generate_user(nUser));
+                uFile->writeUserFile(vecUsers); //cambiar vecUsers por arbol de usuarios
                 cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
             }
         } while (opcion!=5);
-    }
-
-    // USUARIO DATASET GENERATOR
-    void Dataset_Generator(int n) {
-        string pMethod[2] = { "tarjeta","efectivo" };
-        
-        for (int i = 0; i < n; i++) {
-            int dni = rand() % 100000000 + 999999;
-            int money = rand() % 1000 + 20;
-            string pay = pMethod[rand()%2];
-            if (vecUsers.size() > 30000)
-                break;
-            User* cuenta = new User(
-                    "Usuario" + to_string(vecUsers.size()),
-                    "1234",
-                    "NombreUsuario" + to_string(vecUsers.size()),
-                    "ApellidoUsuario" + to_string(vecUsers.size()),
-                    "16/12/90",
-                    pay,
-                    dni,
-                    money);
-            vecUsers.push_back(cuenta);
-        }
     }
 };

@@ -15,7 +15,7 @@ public:
 
 	void writeUserFile(vector<User*> vecUsers) { // cambiar por el arbol
         ofstream file;
-        file.open("users.txt", ios::app);
+        file.open("users.txt", ios::out);
         if (file.fail()) {
             cout << "Error al abrir el archivo" << endl;
             exit(1);

@@ -4,8 +4,6 @@
 #define _CLASSES_HPP_
 
 #include <string>
-#include "Stack.h"
-
 using namespace std;
 
 class Transaction {
@@ -43,8 +41,6 @@ public:
 
 class User {
 private:
-	Stack<Transaction*> transactions;
-
 	string userName;
 	string password;
 	string firstName;
@@ -59,10 +55,6 @@ public:
 		: userName(uName), password(pWord), firstName(fName), lastName(lName),
 		dateofBirth(doBirth), paymentMethod(pMethod), dni(id), money(balance) {}
 	~User() {}
-
-	void addOperation(Transaction* operation) {
-		transactions.push(operation);
-	}
 
 
 	void setUserName(string _userName) { userName = _userName; }

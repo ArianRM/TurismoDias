@@ -133,11 +133,11 @@
     <ClInclude Include="busFileManager.h" />
     <ClInclude Include="Classes.h" />
     <ClInclude Include="consola.h" />
+    <ClInclude Include="DATA_GEN.h" />
     <ClInclude Include="DLL.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="List.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="Stack.h" />
     <ClInclude Include="usersFileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
