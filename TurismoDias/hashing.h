@@ -61,8 +61,11 @@ public:
 		tabla[index] = new HashElement(key, value);
 		numElementos++;
 	}
-	void access(string key) {
-
+	T search(string key) {
+		int index = hashFunction(key);
+		if (tabla[index] != nullptr) {//ver si la posicion esta ocupada
+			index = linearProbing(index);
+		}
+		return tabla[index]->value;
 	}
-
 };
