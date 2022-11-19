@@ -63,7 +63,7 @@ public:
 			node = new NodeAVL<G>(e);
 			return node;
 		}
-
+	// Se realiza la comparación de elementos. . .
 	int r = insertCriteria(e, node->data);
 	if (r < 0) {
 		return insert(node->left, e);
@@ -73,7 +73,13 @@ public:
 		}
 	}
 
-
+	//Para lectura
+	void inOrden(NodeAVL<G>* node) {
+		if (node == nullptr) return;
+		inOrden(node->left);
+		cout << node->data << " ";
+		inOrden(node->right);
+	}
 };
 
 
