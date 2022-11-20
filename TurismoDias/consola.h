@@ -216,7 +216,8 @@ public:
                 bFile->readBusFile();
                 break;
             case 6:
-                mergeSort(BusList, 1, BusList->getSize() - 1);
+                //Ordeamiento de lista de buses por precio
+                mergeSort(*BusList, 0, BusList->getSize()-1);
                 bFile->writeBusFile(BusList);
                 bFile->readBusFile();
                 break;
@@ -225,69 +226,72 @@ public:
                 break;
             case 8:
                 cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;
-                HashTable<string>* ht = new HashTable<string>();
+                /*HashTable<string>* ht = new HashTable<string>();
                 for (int i = 0; i < vecUsers->size(); i++){
                     ht->insertar(vecUsers->at(i)->getPassword());
-                }
+                }*/
                 break;
             }
         } while (opcion!=9);
     }
 
     // ordenamiento de los buses mediante su precio
-    void merge(DLL<Bus>*& BusList, int l, int m, int r) {
+    void merge(DLL<Bus>& buses2, int l, int m, int r) {
 
         int n1 = m - l + 1;
         int n2 = r - m;
 
-        DLL<Bus>* BusListRight = new DLL<Bus>();
-        DLL<Bus>* BusListLeft = new DLL<Bus>();
+        DLL<Bus> cuentasLeft;
+        DLL<Bus> cuentasRight;
 
         for (int i = 0; i < n1; i++) {
-            BusListLeft->push_back(BusList->operator[](l+i));
+            cuentasLeft.push_back(buses2.operator[](l + i));
         }
 
         for (int j = 0; j < n2; j++) {
-            BusListRight->push_back(BusList->operator[](m + j + 1));
+            cuentasRight.push_back(buses2.operator[](m + j + 1));
         }
 
-        // index de la lista left y right
+        // index of vector left and right
         int i1 = 0, i2 = 0;
-        // index de la lista unida
+        // index of merged vector
         int i = l;
 
         while (i1 < n1 && i2 < n2) {
-            if (BusListLeft->operator[](i1).getPrice() <= BusListRight->operator[](i2).getPrice()) {
-                BusList->operator[](i) = BusListLeft->operator[](i1);
+            if (cuentasLeft.operator[](i1).getPrice() <= cuentasRight.operator[](i2).getPrice()) {
+                buses2.operator[](i) = cuentasLeft.operator[](i1);
                 i1++;
             }
             else {
-                BusListLeft->operator[](i) = BusListRight->operator[](i2);
+                buses2.operator[](i) = cuentasRight.operator[](i2);
                 i2++;
             }
             i++;
         }
-        // Copiar los elementos restantes de la lista left si es que queda alguna
+        // Copy the remaining elements of cuentasLeft if there are any
         while (i1 < n1) {
-            BusList->operator[](i) = BusListLeft->operator[](i1);
+            buses2.operator[](i) = cuentasLeft.operator[](i1);
             i1++;
             i++;
         }
 
-        // Copiar los elementos restantes de la lista right si es que queda alguna
+        // Copy the remaining elements of cuentasRight if there are any
         while (i2 < n2) {
-            BusList->operator[](i) = BusListLeft->operator[](i2);
+            buses2.operator[](i) = cuentasRight.operator[](i2);
             i2++;
             i++;
         }
     }
 
-    void mergeSort(DLL<Bus>*& BusList, int l, int r) {
+    void mergeSort(DLL<Bus>& buses2, int l, int r) {
+
         if (l >= r)
             return;
+
         int m = (l + r) / 2;
-        mergeSort(BusList, l, m);
-        mergeSort(BusList, m + 1, r);
-        merge(BusList, l, m, r);
+
+        mergeSort(buses2, l, m);
+        mergeSort(buses2, m + 1, r);
+        merge(buses2, l, m, r);
     }
 };

@@ -59,9 +59,6 @@ public:
 		return aux->data;
 	}
 
-	void selectionSort() {}
-	void insertionSort() {}
-
 	// Mostrar el valor del nodo
 	void showElement() {
 		ListNode<G>* aux = begin;
