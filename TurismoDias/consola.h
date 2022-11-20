@@ -187,8 +187,7 @@ public:
             cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
             cout << "[6] Ordenar buses por precio" << endl;
             cout << "[7] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
-            cout << "[8] Transacciones" << endl;
-            cout << "[9] SALIR" << endl;
+            cout << "[8] SALIR" << endl;
             cin >> opcion;
             system("cls");
             switch (opcion){
@@ -239,16 +238,6 @@ public:
                 //        //ht->insertar();
                 //    }
                 break;
-            case 8:
-                int nTrans;
-                cout << "Numero de transacciones a realizar"; cin >> nTrans;
-                for (int i = 0; i < nTrans; i++)
-                    transactions->push(new Transaction(rand()%40+1,rand()%200+20,"general"));
-                
-                cout << " ----- COLA DE TRANSACCIONES ----- " << endl;
-                for (int i = 0; i < nTrans; i++)
-                    transactions->get(i);
-                break;
             }
         } while (opcion!=8);
     }
@@ -270,9 +259,9 @@ public:
             BusListRight->push_back(BusList->operator[](m + j + 1));
         }
 
-        // index of vector left and right
+        // index de la lista left y right
         int i1 = 0, i2 = 0;
-        // index of merged vector
+        // index de la lista unida
         int i = l;
 
         while (i1 < n1 && i2 < n2) {
@@ -286,14 +275,14 @@ public:
             }
             i++;
         }
-        // Copy the remaining elements of cuentasLeft if there are any
+        // Copiar los elementos restantes de la lista left si es que queda alguna
         while (i1 < n1) {
             BusList->operator[](i) = BusListLeft->operator[](i1);
             i1++;
             i++;
         }
 
-        // Copy the remaining elements of cuentasRight if there are any
+        // Copiar los elementos restantes de la lista right si es que queda alguna
         while (i2 < n2) {
             BusList->operator[](i) = BusListLeft->operator[](i2);
             i2++;
@@ -302,12 +291,9 @@ public:
     }
 
     void mergeSort(DLL<Bus>*& BusList, int l, int r) {
-
         if (l >= r)
             return;
-
         int m = (l + r) / 2;
-
         mergeSort(BusList, l, m);
         mergeSort(BusList, m + 1, r);
         merge(BusList, l, m, r);
