@@ -45,7 +45,6 @@ public:
             });
         return buscada;
     }
-
     // valida la cuenta en el vector
     User* verificarSesion(string user, string password) {
         User* cuentaObjetivo = buscarCuentaPorUsuario(user);
@@ -55,7 +54,6 @@ public:
         }
         return nullptr;
     }
-
     void init() {
         int opcion;
         User* cuenta;
@@ -90,7 +88,6 @@ public:
         } while (opcion != 3);
         
     }
-
     void registrarUsuario() {
         system("cls");
         int dni, saldo, payMethod;
@@ -124,7 +121,6 @@ public:
         new_user->setMoney(saldo);
         vecUsers->push_back(new_user);
     }
-
     User* iniciarSesion() {
         string user, password;
         cout << "\t\tINICIAR SESION" << endl;
@@ -159,7 +155,6 @@ public:
 
         return (i + 1);
     }
-
     void quickSort(vector<User*>*& Usuarios, int low, int high) {
         if (low < high) {
             int pi = partition(Usuarios, low, high);
@@ -282,7 +277,6 @@ public:
             i++;
         }
     }
-
     void mergeSort(DLL<Bus>& buses2, int l, int r) {
 
         if (l >= r)
