@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <string>
 #include "Classes.h"
-#include "DLL.h"
+#include "Structures.hpp"
 using namespace std;
 
 class BusFileManager {
@@ -14,17 +14,17 @@ public:
     BusFileManager() {}
     ~BusFileManager() {}
 
-    void writeBusFile(DLL <Bus*> BusList) {
+    void writeBusFile(DLL <Bus>* BusList) {
         ofstream file;
-        file.open("buses.txt", ios::app);
+        file.open("buses.txt", ios::out);
         if (file.fail()) {
             cout << "Error al abrir el archivo" << endl;
             exit(1);
         }
-        for (int i = 0; i < BusList.getSize(); i++) {
-            file << BusList.operator[](i)->getSeats() << endl;
-            file << BusList.operator[](i)->getPrice() << endl;
-            file << BusList.operator[](i)->getService() << endl;
+        for (int i = 0; i < BusList->getSize(); i++) {
+            file << BusList->operator[](i).getSeats() << endl;
+            file << BusList->operator[](i).getPrice() << endl;
+            file << BusList->operator[](i).getService() << endl;
         }
         file.close();
     }
@@ -32,7 +32,7 @@ public:
     void readBusFile() {
         ifstream file;
         string seats, price, service;
-        int i=0;
+        int i = 0;
         file.open("buses.txt", ios::in);
         if (file.is_open()) {
             while (!file.eof()) {

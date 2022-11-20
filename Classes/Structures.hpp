@@ -210,7 +210,7 @@ public:
 		for (int i = 0; i < pos; i++) {
 			aux = aux->next;
 		}
-		return aux->element;
+		return aux->data;
 	}
 
 	void selectionSort() {}
