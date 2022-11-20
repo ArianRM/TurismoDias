@@ -1,6 +1,7 @@
 ﻿#ifndef _STRUCTURES_HPP_
-define _STRUCTURES_HPP_
+#define _STRUCTURES_HPP_
 
+#include <functional>
 //#####################// Arbol AVL //#########################//
 
 //Nodo de Árbol AVL
@@ -36,7 +37,7 @@ private:
 	// usuario no podrá accederlas.
 
 	//Eliminación del arbol AVL
-	void _delete(NodeAVL<T>*& _root) {
+	void _delete(NodeAVL<G>*& _root) {
 		if (_root == nullptr) return;
 		_delete(_root->left);
 		_delete(_root->right);
@@ -54,7 +55,7 @@ private:
 		node->left = _aux->right;
 		_aux->right = node;
 		//Actualizamos la altura
-		nodo = _aux;
+		node = _aux;
 	}
 
 	void _rotateLeft(NodeAVL<G>*& node) {
@@ -99,7 +100,7 @@ public:
 	AVL() {
 		root = nullptr;
 		insertCriteria = nullptr;
-		searchCriteria = nulltpr;
+		searchCriteria = nullptr;
 	}
 	//Destructor
 	~AVL() {
@@ -107,8 +108,8 @@ public:
 	}
 
 	//Establecer criterio de inserción 
-	void setInsertionCriteria(Compare _insertionCriteria) {
-		insertionCriteria = _insertionCriteria;
+	void setInsertionCriteria(Compare _insertCriteria) {
+		insertCriteria = _insertCriteria;
 	}
 
 	//Establecer criterio de búsqueda 

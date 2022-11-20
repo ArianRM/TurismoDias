@@ -1,12 +1,18 @@
 #include <iostream>
 #include <conio.h>
-#include "consola.h"
+
+//Clases
+#include "Classes.h"
+#include <vector>
+//Estructuras de datos
+#include "Structures.hpp"
 
 using namespace std;
 
 int main(){
-    Consola console;
-    console.init();
-    _getch();
+    vector<User*> vector_user;
+    AVL<User>* users;
+
+    cin.get();
     return 0;
 }
