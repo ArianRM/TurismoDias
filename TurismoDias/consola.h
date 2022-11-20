@@ -1,30 +1,36 @@
 #pragma once
+//dependencias base
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <algorithm>
+//manejo de archivos
 #include "usersFileManager.h"
 #include "busFileManager.h"
+//clases y estructura de datos
 #include "Classes.h"
 #include "binarytree.h"
 #include "AVL.h"
 #include "hashing.h"
 #include "DATA_GEN.h"
 #include "DLL.h"
+#include "Stack.h"
 using namespace std;
 
 class Consola {
 private:
     User* new_user;
-    vector<User*>* vecUsers; // cambiar por arbol
+    vector<User*>* vecUsers;
     UsersFileManager* uFile;
     BusFileManager* bFile;
     DLL <Bus>* BusList;
     DATA_GEN generator;
+    Stack <Transaction*>* transactions;
     int nUser;
 public:
     Consola() {
+        transactions = new Stack<Transaction*>();
         vecUsers = new vector<User*>();
         BusList = new DLL<Bus>();
         new_user = new User();
@@ -33,6 +39,7 @@ public:
     }
     ~Consola() {}
 
+    // busca la cuenta en el vector vecUsers
     User* buscarCuentaPorUsuario(string user) {
         User* buscada = nullptr;
         for_each(vecUsers->begin(), vecUsers->end(), [=, &buscada](User* cuenta) {
@@ -43,6 +50,7 @@ public:
         return buscada;
     }
 
+    // valida la cuenta en el vector
     User* verificarSesion(string user, string password) {
         User* cuentaObjetivo = buscarCuentaPorUsuario(user);
         if (cuentaObjetivo != nullptr &&
@@ -135,6 +143,8 @@ public:
         return nullptr;
     }
 
+
+    //ordenamiento de usuarios mediante dni
     int partition(vector<User*>*& Usuarios, int low, int high) {
         User* pivot = Usuarios->at(high);
         int i = (low - 1);
@@ -177,7 +187,8 @@ public:
             cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
             cout << "[6] Ordenar buses por precio" << endl;
             cout << "[7] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
-            cout << "[8] SALIR" << endl;
+            cout << "[8] Transacciones" << endl;
+            cout << "[9] SALIR" << endl;
             cin >> opcion;
             system("cls");
             switch (opcion){
@@ -188,7 +199,7 @@ public:
                 } while (nUser < 0 || nUser > 1000000);
                 for (int i = 0; i < nUser; i++)
                     vecUsers->push_back(generator.generate_user(nUser));
-                uFile->writeUserFile(vecUsers); //cambiar vecUsers por arbol de usuarios
+                uFile->writeUserFile(vecUsers);
                 cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
                 break;
             case 2:
@@ -200,6 +211,15 @@ public:
                 uFile->readUsersFile();
                 break;
             case 4:
+                //// implementando arbol binario
+            //    BinaryTree<int>* userTree= new BinaryTree<int>();
+            //    for (int i = 0; i < 100; i++) {
+            //        userTree->insert(vecUsers.at(i)->getDni());
+            //    }
+            //    cout << "\t\t[Arbol binario de usuarios]" << endl;
+            //    cout << "[1] En Orden" << endl;
+            //    cout << "[2] Post Orden" << endl;
+            //    cout << "[3] Pre Orden" << endl;
                 break;
             case 5:
                 for (int i = 0; i < 20; i++)
@@ -213,36 +233,27 @@ public:
                 bFile->readBusFile();
                 break;
             case 7:
+                cout << "\t\t[DESENCRIPTANDO CONTRASEÑAS]" << endl;
+                //    HashTable<string>* ht = new HashTable<string>(nUser);
+                //    for (int i = 0; i < nUser; i++){
+                //        //ht->insertar();
+                //    }
                 break;
-            //case 2:
-            //    bFile->readBusFile(BusList);
-            //    break;
-            //case 3:
-            //    //// implementando arbol binario
-            //    BinaryTree<int>* userTree= new BinaryTree<int>();
-            //    for (int i = 0; i < 100; i++) {
-            //        userTree->insert(vecUsers.at(i)->getDni());
-            //    }
-            //    cout << "\t\t[Arbol binario de usuarios]" << endl;
-            //    cout << "[1] En Orden" << endl;
-            //    cout << "[2] Post Orden" << endl;
-            //    cout << "[3] Pre Orden" << endl;
-
-            //    break;
-            //case 4:
-            //    break;
-            //case 5:
-            //    cout << "\t\t[DESENCRIPTANDO CONTRASEÑAS]" << endl;
-            //    HashTable<string>* ht = new HashTable<string>(nUser);
-            //    for (int i = 0; i < nUser; i++){
-            //        //ht->insertar();
-            //    }
-            //    break;
+            case 8:
+                int nTrans;
+                cout << "Numero de transacciones a realizar"; cin >> nTrans;
+                for (int i = 0; i < nTrans; i++)
+                    transactions->push(new Transaction(rand()%40+1,rand()%200+20,"general"));
+                
+                cout << " ----- COLA DE TRANSACCIONES ----- " << endl;
+                for (int i = 0; i < nTrans; i++)
+                    transactions->get(i);
+                break;
             }
         } while (opcion!=8);
     }
 
-
+    // ordenamiento de los buses mediante su precio
     void merge(DLL<Bus>*& BusList, int l, int m, int r) {
 
         int n1 = m - l + 1;
