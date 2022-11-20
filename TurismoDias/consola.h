@@ -1,34 +1,44 @@
 #pragma once
+//dependencias base
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
 #include <algorithm>
+//manejo de archivos
 #include "usersFileManager.h"
 #include "busFileManager.h"
+//clases y estructura de datos
 #include "Classes.h"
+#include "AVL.h"
+#include "hashing.h"
+#include "DATA_GEN.h"
 #include "DLL.h"
 using namespace std;
 
 class Consola {
 private:
     User* new_user;
-    vector<User*> vecUsers;
+    vector<User*>* vecUsers;
     UsersFileManager* uFile;
     BusFileManager* bFile;
-    DLL <Bus*> BusList;
+    DLL <Bus>* BusList;
+    DATA_GEN generator;
+    int nUser;
 public:
     Consola() {
-        BusList = DLL<Bus*>();
+        vecUsers = new vector<User*>();
+        BusList = new DLL<Bus>();
         new_user = new User();
         uFile = new UsersFileManager();
         bFile = new BusFileManager();
     }
     ~Consola() {}
 
+    // busca la cuenta en el vector vecUsers
     User* buscarCuentaPorUsuario(string user) {
         User* buscada = nullptr;
-        for_each(vecUsers.begin(), vecUsers.end(), [=, &buscada](User* cuenta) {
+        for_each(vecUsers->begin(), vecUsers->end(), [=, &buscada](User* cuenta) {
             if (user == cuenta->getUserName()) {
                 buscada = cuenta;
             }
@@ -36,6 +46,7 @@ public:
         return buscada;
     }
 
+    // valida la cuenta en el vector
     User* verificarSesion(string user, string password) {
         User* cuentaObjetivo = buscarCuentaPorUsuario(user);
         if (cuentaObjetivo != nullptr &&
@@ -68,7 +79,6 @@ public:
             case 2:
                 system("cls");
                 registrarUsuario();
-                uFile->writeUserFile(vecUsers);
                 break;
             case 3:
                 cout << "///GRACIAS POR USAR TURISMO DIAS///" << endl;
@@ -112,7 +122,7 @@ public:
         cout << "Saldo inicial: ";
         cin >> saldo;
         new_user->setMoney(saldo);
-        vecUsers.push_back(new_user);
+        vecUsers->push_back(new_user);
     }
 
     User* iniciarSesion() {
@@ -129,64 +139,159 @@ public:
         return nullptr;
     }
 
+
+    //ordenamiento de usuarios mediante dni
+    int partition(vector<User*>*& Usuarios, int low, int high) {
+        User* pivot = Usuarios->at(high);
+        int i = (low - 1);
+
+        for (int j = low; j <= high - 1; j++) {
+            if (Usuarios->at(j)->getDni() <= pivot->getDni()) {
+                i++;
+                User* aux = Usuarios->at(i);
+                Usuarios->at(i) = Usuarios->at(j);
+                Usuarios->at(j) = aux;
+            }
+        }
+        User* aux = Usuarios->at(i + 1);
+        Usuarios->at(i + 1) = Usuarios->at(high);
+        Usuarios->at(high) = aux;
+
+        return (i + 1);
+    }
+
+    void quickSort(vector<User*>*& Usuarios, int low, int high) {
+        if (low < high) {
+            int pi = partition(Usuarios, low, high);
+
+            quickSort(Usuarios, low, pi - 1);
+            quickSort(Usuarios, pi + 1, high);
+        }
+    }
+
+
     void home(User *new_user) {
-        int nUser;
+
         int opcion;
         do {
-            cout << "\t\t[BIENVENIDO " << new_user->getFirstName() << "]" << endl;
-            cout << "[1] Buscar buses" << endl;
-            cout << "[2] Ver saldo de cuenta" << endl;
-            cout << "[3] Ver cuenta" << endl;
-            cout << "[4] Generar usuarios aleatoriamente" << endl;
-            cout << "[5] SALIR" << endl;
+            cout << endl;
+            cout << "\t //////[BIENVENIDO " << new_user->getFirstName() << "]//////" << endl;
+            cout << "[1] Generar usuarios aleatoriamente" << endl; // GENERADOR DE DATASET ALEATORIO DE USUARIOS
+            cout << "[2] Ver Usuarios" << endl; 
+            cout << "[3] Ordenar usuarios por dni" << endl;
+            cout << "[4] Arbol AVL de usuarios" << endl; // ARBOL BINARIO DE USUARIOS
+            cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
+            cout << "[6] Ordenar buses por precio" << endl;
+            cout << "[7] Arbol AVL buses" << endl;
+            cout << "[8] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
+            cout << "[9] SALIR" << endl;
             cin >> opcion;
             system("cls");
             switch (opcion){
-            case 1:
-                bFile->readBusFile();
+            case 1: 
+                do{
+                    cout << "Ingrese la cantidad de usuarios que desea generar (hasta 10^6): ";
+                    cin >> nUser;
+                } while (nUser < 0 || nUser > 1000000);
+                for (int i = 0; i < nUser; i++)
+                    vecUsers->push_back(generator.generate_user(nUser));
+                uFile->writeUserFile(vecUsers);
+                cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
                 break;
             case 2:
-                cout << "\t\t [SALDO DE CUENTA]" << endl;
-                cout << "[Metodo de pago: " << new_user->getPaymentMethod() << "]" << endl;
-                cout << "[Saldo: " << new_user->getMoney() << "]" << endl;
+                uFile->readUsersFile();
                 break;
             case 3:
-                cout << "\t\t[DETALLES DE CUENTA]" << endl;
-                cout << "[Nombre de usuario: " << new_user->getFirstName() << "]" << endl;
-                cout << "[Nombre: " << new_user->getFirstName() << "]" << endl;
-                cout << "[Apellido: " << new_user->getLastName() << "]" << endl;
-                cout << "[Fecha de nacimiento: " << new_user->getDateofBirth() << "]" << endl;
-                cout << "[DNI: " << new_user->getDni() << "]" << endl;          
+                quickSort(vecUsers, 0, vecUsers->size() - 1);
+                uFile->writeUserFile(vecUsers);
+                uFile->readUsersFile();
                 break;
-            case 4: 
-                cout << "Ingrese la cantidad de usuarios que desea generar: ";
-                cin >> nUser;
-                Dataset_Generator(nUser);
-                cout << "DATOS DE USUARIOS GENERADOS CORRECTAMENTE" << endl;
+            case 4:
+                // implementando el arbol AVL para usuarios
+                break;
+            case 5:
+                for (int i = 0; i < 20; i++)
+                    BusList->push_back(generator.generate_bus());
+                bFile->writeBusFile(BusList);
+                bFile->readBusFile();
+                break;
+            case 6:
+                //Ordeamiento de lista de buses por precio
+                mergeSort(*BusList, 0, BusList->getSize()-1);
+                bFile->writeBusFile(BusList);
+                bFile->readBusFile();
+                break;
+            case 7:
+                // implementar arbol AVL para buses
+                break;
+            case 8:
+                cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;
+                /*HashTable<string>* ht = new HashTable<string>();
+                for (int i = 0; i < vecUsers->size(); i++){
+                    ht->insertar(vecUsers->at(i)->getPassword());
+                }*/
+                break;
             }
-        } while (opcion!=5);
+        } while (opcion!=9);
     }
 
-    // USUARIO DATASET GENERATOR
-    void Dataset_Generator(int n) {
-        string pMethod[2] = { "tarjeta","efectivo" };
-        
-        for (int i = 0; i < n; i++) {
-            int dni = rand() % 100000000 + 999999;
-            int money = rand() % 1000 + 20;
-            string pay = pMethod[rand()%2];
-            if (vecUsers.size() > 30000)
-                break;
-            User* cuenta = new User(
-                    "Usuario" + to_string(vecUsers.size()),
-                    "1234",
-                    "NombreUsuario" + to_string(vecUsers.size()),
-                    "ApellidoUsuario" + to_string(vecUsers.size()),
-                    "16/12/90",
-                    pay,
-                    dni,
-                    money);
-            vecUsers.push_back(cuenta);
+    // ordenamiento de los buses mediante su precio
+    void merge(DLL<Bus>& buses2, int l, int m, int r) {
+
+        int n1 = m - l + 1;
+        int n2 = r - m;
+
+        DLL<Bus> cuentasLeft;
+        DLL<Bus> cuentasRight;
+
+        for (int i = 0; i < n1; i++) {
+            cuentasLeft.push_back(buses2.operator[](l + i));
         }
+
+        for (int j = 0; j < n2; j++) {
+            cuentasRight.push_back(buses2.operator[](m + j + 1));
+        }
+
+        // index of vector left and right
+        int i1 = 0, i2 = 0;
+        // index of merged vector
+        int i = l;
+
+        while (i1 < n1 && i2 < n2) {
+            if (cuentasLeft.operator[](i1).getPrice() <= cuentasRight.operator[](i2).getPrice()) {
+                buses2.operator[](i) = cuentasLeft.operator[](i1);
+                i1++;
+            }
+            else {
+                buses2.operator[](i) = cuentasRight.operator[](i2);
+                i2++;
+            }
+            i++;
+        }
+        // Copy the remaining elements of cuentasLeft if there are any
+        while (i1 < n1) {
+            buses2.operator[](i) = cuentasLeft.operator[](i1);
+            i1++;
+            i++;
+        }
+
+        // Copy the remaining elements of cuentasRight if there are any
+        while (i2 < n2) {
+            buses2.operator[](i) = cuentasRight.operator[](i2);
+            i2++;
+            i++;
+        }
+    }
+
+    void mergeSort(DLL<Bus>& buses2, int l, int r) {
+
+        if (l >= r)
+            return;
+
+        int m = (l + r) / 2;
+
+        mergeSort(buses2, l, m);
+        mergeSort(buses2, m + 1, r);
+        merge(buses2, l, m, r);
     }
 };

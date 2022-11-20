@@ -13,65 +13,56 @@ public:
     UsersFileManager() {}
 	~UsersFileManager(){}
 
-	void writeUserFile(vector<User*> vecUsers) {
+	void writeUserFile(vector<User*>* vecUsers) { // cambiar por el arbol
         ofstream file;
-        file.open("users.txt", ios::app);
+        file.open("users.txt", ios::out);
         if (file.fail()) {
             cout << "Error al abrir el archivo" << endl;
             exit(1);
         }
         //file << "///// USUARIOS /////" << endl;
-        for (int i = 0; i < vecUsers.size(); i++) {
+        for (int i = 0; i < vecUsers->size(); i++) {
             //file << "\t[USUARIO " << i + 1 << "]" << endl;
-            file << vecUsers[i]->getUserName() << endl;
-            file << vecUsers[i]->getPassword() << endl;
-            file << vecUsers[i]->getFirstName() << endl;
-            file << vecUsers[i]->getLastName() << endl;
-            file << vecUsers[i]->getDateofBirth() << endl;
-            file << vecUsers[i]->getDni() << endl;
-            file << vecUsers[i]->getPaymentMethod() << endl;
-            file << vecUsers[i]->getMoney() << endl;
+            file << vecUsers->at(i)->getUserName() << endl;
+            file << vecUsers->at(i)->getPassword() << endl;
+            file << vecUsers->at(i)->getFirstName() << endl;
+            file << vecUsers->at(i)->getLastName() << endl;
+            file << vecUsers->at(i)->getDateofBirth() << endl;
+            file << vecUsers->at(i)->getDni() << endl;
+            file << vecUsers->at(i)->getPaymentMethod() << endl;
+            file << vecUsers->at(i)->getMoney() << endl;
         }
         file.close();
 	}
 
-    vector<User*> readUsersFile() {
-        vector<User*> vecUsers;
+    void readUsersFile() {
         ifstream file;
-        string data;
- 
-        while (!file.eof()) {
-            User* cuenta = new User();
-            //linea 1 username
-            getline(file, data);
-            cuenta->setUserName(data);
-            //linea 2 password
-            getline(file, data);
-            cuenta->setPassword(data);
-            //linea 3 name
-            getline(file, data);
-            cuenta->setFirstName(data);
-            //linea 4 lastname
-            getline(file, data);
-            cuenta->setLastName(data);
-            //linea 5 birth
-            getline(file, data);
-            cuenta->setDateofBirth(data);
-            //linea 6 dni
-            //getline(file, data);
-            int readDni;
-            file >> readDni;
-            cuenta->setDni(readDni);
-            //linea 7 payment method
-            getline(file, data);
-            cuenta->setPaymentMethod(data);
-            //linea 8 saldo
-            getline(file, data);
-            int readSaldo;
-            file >> readSaldo;
-            cuenta->setMoney(readSaldo);
-            vecUsers.push_back(cuenta);
+        string username, password, fname, lname, birth, pmethod, dni, money;
+        int i=0;
+        file.open("users.txt", ios::in);
+        if (file.is_open()) {
+            while (!file.eof()) {
+                i++;
+                getline(file, username);
+                getline(file, password);
+                getline(file, fname);
+                getline(file, lname);
+                getline(file, birth);
+                getline(file, dni);
+                getline(file, pmethod);
+                getline(file, money);
+                cout
+                    << "[Username:" << username
+                    << " | Password:" << password
+                    << " | FirstName:" << fname
+                    << " | LastName:" << lname
+                    << " | Birth:" << birth
+                    << " | DNI:" << dni
+                    << " | Payment Method:" << pmethod
+                    << " | Money:" << money
+                    << "]" << endl;
+            }
         }
-        return vecUsers;
     }
+ 
 };

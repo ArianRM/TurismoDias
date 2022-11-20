@@ -4,47 +4,35 @@
 #define _CLASSES_HPP_
 
 #include <string>
-#include "Stack.h"
-
 using namespace std;
 
 class Transaction {
-	short seat;
-	short price;
+	int seat;
+	int price;
 	string service;
-	string begin_p;
-	string end_p;
 
 public:
-	Transaction(short seat = 0, short price = 0, string service = "", string begin_p = "", string end_p = "")
-		:seat(seat), price(price), service(service), begin_p(begin_p), end_p(end_p) {}
+	Transaction(int seat = 0, int price = 0, string service = "", string begin_p = "", string end_p = "")
+		:seat(seat), price(price), service(service){}
 
 	~Transaction() {}
 
 	string toString() {
 		return "Asiento: " + to_string(seat) + "Precio: " + to_string(price) +
-			"Tipo de servicio: " + service + "Lugar de inicio:" + begin_p +
-			" Lugar de llegada: " + end_p + "\n\n";
+			"Tipo de servicio: " + service;
 	}
 
-	void setSeat(short _seat) { seat = _seat; }
-	void setPrice(short _price) { price = _price; }
+	void setSeat(int _seat) { seat = _seat; }
+	void setPrice(int _price) { price = _price; }
 	void setService(string _service) { service = _service; }
-	void setBegin_p(string _begin_p) { begin_p = _begin_p; }
-	void setEnd_p(string _end_p) { end_p = _end_p; }
 
-	short getSeat(short _seat) { return seat; }
-	short getPrice(short _price) { return price; }
+	int getSeat(int _seat) { return seat; }
+	int getPrice(int _price) { return price; }
 	string getService(string _service) { return service; }
-	string getBegin_p(string _begin_p) { return begin_p; }
-	string getEnd_p(string _end_p) { return end_p; }
-
 };
 
 class User {
 private:
-	Stack<Transaction*> transactions;
-
 	string userName;
 	string password;
 	string firstName;
@@ -59,10 +47,6 @@ public:
 		: userName(uName), password(pWord), firstName(fName), lastName(lName),
 		dateofBirth(doBirth), paymentMethod(pMethod), dni(id), money(balance) {}
 	~User() {}
-
-	void addOperation(Transaction* operation) {
-		transactions.push(operation);
-	}
 
 
 	void setUserName(string _userName) { userName = _userName; }
@@ -88,28 +72,28 @@ public:
 };
 
 class Bus {
-	short seats;
-	short price;
+	int seats;
+	int price;
 	string service;
 	string begin_p;
 	string end_p;
 
 public:
-	Bus(short precio = 0, string servicio = " ") {
-		seats = 40;
+	Bus(int precio = 0, string servicio = " ") {
+		seats = rand()%40;
 		price = precio;
 		service = servicio;
 
 	}
 	~Bus() {}
 
-	void setPrice(short precio) { price = precio; }
+	void setPrice(int precio) { price = precio; }
 	void setService(string servicio) { service = service; }
 	void setBegin_p(string _begin_p) { begin_p = _begin_p; }
 	void setEnd_p(string _end_p) { end_p = _end_p; }
 
-	short getSeats() { return seats; }
-	short getPrice() { return price; }
+	int getSeats() { return seats; }
+	int getPrice() { return price; }
 	string getService() { return service; }
 	string getBegin_p(string _begin_p) { return begin_p; }
 	string getEnd_p(string _end_p) { return end_p; }

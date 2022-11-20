@@ -14,17 +14,17 @@ public:
     BusFileManager() {}
     ~BusFileManager() {}
 
-    void writeBusFile(DLL <Bus*> BusList) {
+    void writeBusFile(DLL <Bus>* BusList) {
         ofstream file;
-        file.open("buses.txt", ios::app);
+        file.open("buses.txt", ios::out);
         if (file.fail()) {
             cout << "Error al abrir el archivo" << endl;
             exit(1);
         }
-        for (int i = 0; i < BusList.getSize(); i++) {
-            file << BusList.operator[](i)->getSeats() << endl;
-            file << BusList.operator[](i)->getPrice() << endl;
-            file << BusList.operator[](i)->getService() << endl;
+        for (int i = 0; i < BusList->getSize(); i++) {
+            file << BusList->operator[](i).getSeats() << endl;
+            file << BusList->operator[](i).getPrice() << endl;
+            file << BusList->operator[](i).getService() << endl;
         }
         file.close();
     }
