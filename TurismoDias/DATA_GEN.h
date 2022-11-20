@@ -13,6 +13,14 @@ public:
 	DATA_GEN(){}
 	~DATA_GEN(){}
 
+	Bus generate_bus() {
+		string serv[] = { "vip", "economico", "ejecutivo" };
+		return Bus(
+			rand()%100+20,
+			serv[rand()%3]
+		);
+	}
+
 	User* generate_user(int n) {
 		return new User(
 			genUsername(n),

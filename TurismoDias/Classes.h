@@ -80,28 +80,28 @@ public:
 };
 
 class Bus {
-	short seats;
-	short price;
+	int seats;
+	int price;
 	string service;
 	string begin_p;
 	string end_p;
 
 public:
-	Bus(short precio = 0, string servicio = " ") {
-		seats = 40;
+	Bus(int precio = 0, string servicio = " ") {
+		seats = rand()%40;
 		price = precio;
 		service = servicio;
 
 	}
 	~Bus() {}
 
-	void setPrice(short precio) { price = precio; }
+	void setPrice(int precio) { price = precio; }
 	void setService(string servicio) { service = service; }
 	void setBegin_p(string _begin_p) { begin_p = _begin_p; }
 	void setEnd_p(string _end_p) { end_p = _end_p; }
 
-	short getSeats() { return seats; }
-	short getPrice() { return price; }
+	int getSeats() { return seats; }
+	int getPrice() { return price; }
 	string getService() { return service; }
 	string getBegin_p(string _begin_p) { return begin_p; }
 	string getEnd_p(string _end_p) { return end_p; }
