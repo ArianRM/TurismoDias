@@ -183,8 +183,8 @@ public:
             cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
             cout << "[6] Ordenar buses por precio" << endl;
             cout << "[7] Arbol AVL buses" << endl;
-            cout << "[7] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
-            cout << "[8] SALIR" << endl;
+            cout << "[8] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
+            cout << "[9] SALIR" << endl;
             cin >> opcion;
             system("cls");
             switch (opcion){
@@ -207,15 +207,7 @@ public:
                 uFile->readUsersFile();
                 break;
             case 4:
-                // implementando arbol binario
-                /*BinaryTree<int>* userTree= new BinaryTree<int>();
-                for (int i = 0; i < 100; i++) {
-                    userTree->insert(vecUsers.at(i)->getDni());
-                }
-                cout << "\t\t[Arbol binario de usuarios]" << endl;
-                cout << "[1] En Orden" << endl;
-                cout << "[2] Post Orden" << endl;
-                cout << "[3] Pre Orden" << endl;*/
+                // implementando el arbol AVL para usuarios
                 break;
             case 5:
                 for (int i = 0; i < 20; i++)
@@ -229,14 +221,17 @@ public:
                 bFile->readBusFile();
                 break;
             case 7:
-                cout << "\t\t[DESENCRIPTANDO CONTRASEÑAS]" << endl;
-                //    HashTable<string>* ht = new HashTable<string>(nUser);
-                //    for (int i = 0; i < nUser; i++){
-                //        //ht->insertar();
-                //    }
+                // implementar arbol AVL para buses
+                break;
+            case 8:
+                cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;
+                HashTable<string>* ht = new HashTable<string>();
+                for (int i = 0; i < vecUsers->size(); i++){
+                    ht->insertar(vecUsers->at(i)->getPassword());
+                }
                 break;
             }
-        } while (opcion!=8);
+        } while (opcion!=9);
     }
 
     // ordenamiento de los buses mediante su precio
