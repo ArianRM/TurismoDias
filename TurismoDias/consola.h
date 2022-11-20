@@ -226,10 +226,17 @@ public:
                 break;
             case 8:
                 cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;
+<<<<<<< HEAD
                 /*HashTable<string>* ht = new HashTable<string>();
                 for (int i = 0; i < vecUsers->size(); i++){
                     ht->insertar(vecUsers->at(i)->getPassword());
                 }*/
+=======
+                HashTable<string>* ht = new HashTable<string>();
+                for (int i = 0; i < vecUsers->size(); i++){
+                    ht->insertar(vecUsers->at(i)->getPassword());
+                }
+>>>>>>> b6d1a54022f84b458c93b3d61af2ce2fd23e57b2
                 break;
             }
         } while (opcion!=9);
