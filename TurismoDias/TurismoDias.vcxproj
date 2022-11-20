@@ -131,7 +131,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AVL.h" />
-    <ClInclude Include="binarytree.h" />
     <ClInclude Include="busFileManager.h" />
     <ClInclude Include="Classes.h" />
     <ClInclude Include="consola.h" />
@@ -139,8 +138,6 @@
     <ClInclude Include="DLL.h" />
     <ClInclude Include="hashing.h" />
     <ClInclude Include="Iterator.h" />
-    <ClInclude Include="List.h" />
-    <ClInclude Include="Node.h" />
     <ClInclude Include="usersFileManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

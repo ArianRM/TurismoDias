@@ -10,12 +10,10 @@
 #include "busFileManager.h"
 //clases y estructura de datos
 #include "Classes.h"
-#include "binarytree.h"
 #include "AVL.h"
 #include "hashing.h"
 #include "DATA_GEN.h"
 #include "DLL.h"
-#include "Stack.h"
 using namespace std;
 
 class Consola {
@@ -26,11 +24,9 @@ private:
     BusFileManager* bFile;
     DLL <Bus>* BusList;
     DATA_GEN generator;
-    Stack <Transaction*>* transactions;
     int nUser;
 public:
     Consola() {
-        transactions = new Stack<Transaction*>();
         vecUsers = new vector<User*>();
         BusList = new DLL<Bus>();
         new_user = new User();
@@ -183,9 +179,10 @@ public:
             cout << "[1] Generar usuarios aleatoriamente" << endl; // GENERADOR DE DATASET ALEATORIO DE USUARIOS
             cout << "[2] Ver Usuarios" << endl; 
             cout << "[3] Ordenar usuarios por dni" << endl;
-            cout << "[4] Arbol Binario de usuarios" << endl; // ARBOL BINARIO DE USUARIOS
+            cout << "[4] Arbol AVL de usuarios" << endl; // ARBOL BINARIO DE USUARIOS
             cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
             cout << "[6] Ordenar buses por precio" << endl;
+            cout << "[7] Arbol AVL buses" << endl;
             cout << "[7] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
             cout << "[8] SALIR" << endl;
             cin >> opcion;
@@ -210,15 +207,15 @@ public:
                 uFile->readUsersFile();
                 break;
             case 4:
-                //// implementando arbol binario
-            //    BinaryTree<int>* userTree= new BinaryTree<int>();
-            //    for (int i = 0; i < 100; i++) {
-            //        userTree->insert(vecUsers.at(i)->getDni());
-            //    }
-            //    cout << "\t\t[Arbol binario de usuarios]" << endl;
-            //    cout << "[1] En Orden" << endl;
-            //    cout << "[2] Post Orden" << endl;
-            //    cout << "[3] Pre Orden" << endl;
+                // implementando arbol binario
+                /*BinaryTree<int>* userTree= new BinaryTree<int>();
+                for (int i = 0; i < 100; i++) {
+                    userTree->insert(vecUsers.at(i)->getDni());
+                }
+                cout << "\t\t[Arbol binario de usuarios]" << endl;
+                cout << "[1] En Orden" << endl;
+                cout << "[2] Post Orden" << endl;
+                cout << "[3] Pre Orden" << endl;*/
                 break;
             case 5:
                 for (int i = 0; i < 20; i++)
