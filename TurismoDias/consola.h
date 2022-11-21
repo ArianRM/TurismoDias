@@ -24,6 +24,7 @@ private:
     BusFileManager* bFile;
     DLL <Bus>* BusList;
     DATA_GEN generator;
+    
     int nUser;
 public:
     Consola() {
@@ -178,7 +179,7 @@ public:
             cout << "[5] Ver buses " << endl; // DLL DE BUSES CARGADA DESDE EL DISCO
             cout << "[6] Ordenar buses por precio" << endl;
             cout << "[7] Arbol AVL buses" << endl;
-            cout << "[8] Desencriptar contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
+            cout << "[8] Tabla contraseñas (Hash Table)" << endl; // HASH TABLE DE CONTRASEÑAS DE USUARIOS
             cout << "[9] SALIR" << endl;
             cin >> opcion;
             system("cls");
@@ -221,10 +222,13 @@ public:
                 break;
             case 8:
                 cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;
-                /*HashTable<string>* ht = new HashTable<string>();
+                HashTable* passTable = new HashTable(vecUsers->size());
                 for (int i = 0; i < vecUsers->size(); i++){
-                    ht->insertar(vecUsers->at(i)->getPassword());
-                }*/
+                    passTable->insert_element(vecUsers->at(i)->getPassword(), vecUsers->at(i)->getUserName());
+                }
+                for (int i = 0; i < passTable->size(); ++i) {
+                    cout << passTable->search_key(vecUsers->at(i)->getPassword()) << " : " << vecUsers->at(i)->getPassword() << endl;
+                }
                 break;
             }
         } while (opcion!=9);

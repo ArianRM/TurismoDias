@@ -1,76 +1,85 @@
 #pragma once
+#include <string>
 #include "classes.h"
 
-template<typename T>
 class HashElement {
 private:
 	string key;
-	T value;
+	string value;
 public:
-	HashElement(string key, T value) {
+	HashElement(string key, string value) {
 		this->key = key;
 		this->value = value;
 	}
+	string getKey() { return key; }
+	string getValue() { return value; }
 };
 
-template<typename T>
 class HashTable {
-	HashElement<T>** tabla;
-	int numElementos;
-	int table_size;
+private:
+	HashElement** passTable;
+	int numElements;
+	int tableSize;
+
 public:
-	HashTable(int size = 1500000) {
-		numElementos = 0;
-		table_size = size;
-		tabla = new HashElement * [table_size];
-		for (int i = 0; i < table_size; i++) {
-			tabla[i] = nullptr;
+	HashTable(int tableSize) {
+		this->tableSize = tableSize;
+		passTable = new HashElement * [tableSize];
+		for (int i = 0; i < tableSize; ++i) {
+			passTable[i] = nullptr;
 		}
+		numElements = 0;
 	}
-	~HashTable() {
-		for (int i = 0; i < table_size; i++) {
-			if (tabla[i] != nullptr) {
-				delete tabla[i];
+	~HashTable()
+	{
+		for (int i = 0; i < tableSize; ++i) {
+			if (passTable[i] != nullptr) {
+				delete passTable[i];
 			}
 		}
-		delete[] tabla;
-	}
-	int hashFunction(string key) {
-		string password = key;
-		int hash = 0;
-		for (int i = 0; i < password.length(); i++) {
-			hash = 37 * hash + password[i];
-		}
-		return hash % table_size;
+		delete[] passTable;
 	}
 
-	int linearProbing(int collisionIndex) {
-		int jump = 1;
-		int newIndex = collisionIndex;
-		while (tabla[newIndex] != nullptr) {
-			newIndex = (collisionIndex + jump) % table_size;
-			jump++;
+	void insert_element(string key, string value) {
+		int base, step, hash, newKey = 0;
+		//validar si la tabla está llena
+		if (numElements == tableSize)return;
+		//Función Hash
+		for (int i = 0; i < key.length(); i++)
+			newKey += key[i];
+		base = newKey % tableSize;
+		hash = base;
+		//constante para Hash2
+		step = 0;
+		while (passTable[hash] != nullptr)
+		{
+			//Función Hash2
+			hash = (base + step) % tableSize;
+			step++;
 		}
-		return newIndex;
+		//almacenarlo en la tabla
+		passTable[hash] = new HashElement(key, value);
+		numElements++;
+	}
+	int size() {
+		return tableSize;
 	}
 
-	void insertar(string key, T value) {
-		if (numElementos == table_size) { //ver si tabla esta llena
-			return;
-		}
-		int index = hashFunction(key);
-		if (tabla[index] != nullptr) {//ver si la posicion esta ocupada
-			index = linearProbing(index);
-		}
-		tabla[index] = new HashElement(key, value);
-		numElementos++;
-	}
+	int search_key(string key) {
+		int step = 0;
+		int i, base, newKey = 0;
+		for (int i = 0; i < key.length(); i++)
+			newKey += key[i];
+		i = base = newKey % tableSize; //hash1 es = a hash2 cuando step=0;
+		while (true)
+		{
+			if (passTable[i] == nullptr)return -1;
+			else if (passTable[i]->getKey() == key) {
+				return i;
+			}
+			else step++;
 
-	T search(string key) {
-		int index = hashFunction(key);
-		if (tabla[index] != nullptr) {//ver si la posicion esta ocupada
-			index = linearProbing(index);
+			i = (base + step) % tableSize;
 		}
-		return tabla[index]->value;
 	}
 };

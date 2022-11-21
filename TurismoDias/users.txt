@@ -84,5 +84,5 @@ arian
 ramirez
 120203
 71238800
-efectivo
-123
+tarjeta
+124
