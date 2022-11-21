@@ -112,6 +112,11 @@ public:
 	string getBegin_p(string _begin_p) { return begin_p; }
 	string getEnd_p(string _end_p) { return end_p; }
 
+	void print()
+	{
+		cout << "[Asientos: " << seats <<"]" << " [Precio: " << price << "]";
+		cout << " [Servicio: " << service << "]\n";
+	}
 
 };
 

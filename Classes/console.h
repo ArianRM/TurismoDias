@@ -5,17 +5,30 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include <functional>
+#include <Windows.h>
 //manejo de archivos
 #include "usersFileManager.h"
 #include "busFileManager.h"
 //clases y estructura de datos
 #include "Classes.h"
 #include "Structures.hpp"
-#include "Hashing.h"
+
 #include "Generator.h"
 
 using namespace std;
 
+//Funciones
+void functionPrint(Bus bus)
+{
+    bus.print();
+}
+/*
+int functionCompare(short a, short b)
+{
+    return a - b;
+}
+*/
 class Consola {
 private:
     User* new_user;
@@ -25,6 +38,9 @@ private:
     DLL <Bus>* BusList;
     DATA_GEN generator;
     int nUser;
+    AVL <Bus>* TreeBus;
+    //function<int(short, short)> functionCompare;
+   
 public:
     Consola() {
         vecUsers = new vector<User*>();
@@ -32,8 +48,12 @@ public:
         new_user = new User();
         uFile = new UsersFileManager();
         bFile = new BusFileManager();
+        TreeBus = new AVL<Bus>();
+        //functionCompare = [](short a, short b) { return a - b; };
     }
     ~Consola() {}
+
+    
 
     // busca la cuenta en el vector vecUsers
     User* buscarCuentaPorUsuario(string user) {
@@ -217,7 +237,24 @@ public:
                 bFile->readBusFile();
                 break;
             case 7:
-                // implementar arbol AVL para buses
+                for (int i = 0; i < 20; i++) 
+                {
+                    TreeBus->insert(BusList->getData(i));
+                    
+                    if (i != 0)
+                    {
+                        short a = BusList->getData(i).getPrice();
+                        short b = BusList->getData(i - 1).getPrice();
+                        
+                        TreeBus->setInsertionCriteria((auto compare = [](short a, short b) {return b - a; }));
+                        TreeBus->insert(BusList->getData(i));
+
+                    }
+                    
+                }
+                TreeBus->setFunctionVoid(functionPrint);
+                TreeBus->inOrden();
+                Sleep(2000);
                 break;
             case 8:
                 cout << "\t\t[TABLA DE CONTRASEÑAS]" << endl;

@@ -20,7 +20,7 @@ public:
             cout << "Error al abrir el archivo" << endl;
             exit(1);
         }
-        //file << "///// USUARIOS /////" << endl;
+        //file << "///// USUARIOS /////" << endl
         for (int i = 0; i < vecUsers->size(); i++) {
             //file << "\t[USUARIO " << i + 1 << "]" << endl;
             file << vecUsers->at(i)->getUserName() << endl;

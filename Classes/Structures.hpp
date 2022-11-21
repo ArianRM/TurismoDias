@@ -2,7 +2,8 @@
 #define _STRUCTURES_HPP_
 
 #include <functional>
-//#####################// Arbol AVL //#########################//
+
+//#################################### Arbol AVL ####################################////
 
 //Nodo de Árbol AVL
 template <typename G>
@@ -16,6 +17,8 @@ struct NodeAVL {
 	NodeAVL(G data = nullptr, int factor = 0, NodeAVL* right = nullptr
 		, NodeAVL* left = nullptr) :data(data), factor(factor), right(right)
 		, left(left) {}
+
+
 };
 
 template <class G>
@@ -24,6 +27,7 @@ class AVL
 private:
 	//Raiz
 	NodeAVL<G>* root;
+	void(*_function)(G);
 	typedef function<int(G, G)> Compare;
 
 	//Criterios de inserción y busqueda.
@@ -94,6 +98,36 @@ private:
 		node->factor = 1 + ((h_left > h_right) ? h_left : h_right);
 	}
 	// Fin del proceso de balanceo
+
+	//Insertar una hoja de árbol
+	NodeAVL<G>* _insert(NodeAVL<G>*& node, G e) {
+		if (node == nullptr) {
+			node = new NodeAVL<G>(e);
+			return node;
+		}
+
+		// Se realiza la comparación de elementos. . .
+		int r = insertCriteria(e, node->data);
+
+
+		if (r == 0)return;
+
+		else if (r < 0) {
+			return insert(node->left, e);
+		}
+		else if (r > 0) {
+			return insert(node->right, e);
+		}
+		_balance(node);
+	}
+
+	//Para lectura
+	void _inOrden(NodeAVL<G>* node) {
+		if (node == nullptr) return;
+		_inOrden(node->left);
+		_function(node->data);
+		_inOrden(node->right);
+	}
 public:
 	
 	//Constructor
@@ -116,42 +150,27 @@ public:
 	void setSearchCriteria(Compare _searchCriteria) {
 		searchCriteria = _searchCriteria;
 	}
-
-	
-
-	//Insertar una hoja de árbol
-	NodeAVL<G>* insert(NodeAVL<G>*& node, G e){
-		if (node == nullptr) {
-			node = new NodeAVL<G>(e);
-			return node;
-		}
-		
-	// Se realiza la comparación de elementos. . .
-	int r = insertCriteria(e, node->data);
-	
-
-	if (r == 0)return;
-
-	else if (r < 0) {
-		return insert(node->left, e);
+	//Establecer función
+	void setFunctionVoid(function<void(G)> function) {
+		_function = function;
 	}
-	else if (r > 0) {
-		return insert(node->right, e);
-		}
-	_balance(node);
+	void setFunctionReturn(function<G(G, G)> function)
+	{
+		_function = function;
 	}
-
+	
+	void insert(G e)
+	{
+		_insert(root, e);
+	}
 	//Para lectura
-	void inOrden(NodeAVL<G>* node) {
-		if (node == nullptr) return;
-		inOrden(node->left);
-		cout << node->data << " ";
-		inOrden(node->right);
+	void inOrden() {
+		_inOrden(root);
 	}
 };
 
 
-//#####################// Double List //#########################//
+//#################################### Double List ####################################//
 
 template <typename G>
 struct ListNode
@@ -204,7 +223,7 @@ public:
 
 	long getSize() { return size; }
 
-	// Obtener un valor del nodo
+	
 	G& operator[](const int& pos) {
 		ListNode<G>* aux = begin;
 		for (int i = 0; i < pos; i++) {
@@ -212,9 +231,14 @@ public:
 		}
 		return aux->data;
 	}
-
-	void selectionSort() {}
-	void insertionSort() {}
+	
+	G getData(const int& pos) {
+		ListNode<G>* aux = begin;
+		for (int i = 0; i < pos; i++) {
+			aux = aux->next;
+		}
+		return aux->data;
+	}
 
 	// Mostrar el valor del nodo
 	void showElement() {
@@ -233,7 +257,79 @@ public:
 
 };
 
+//#################################### Hash Table ####################################//
 
+template<typename T>
+class HashElement {
+private:
+	string key;
+	T value;
+public:
+	HashElement(string key, T value) {
+		this->key = key;
+		this->value = value;
+	}
+};
 
+template<typename T>
+class HashTable {
+	HashElement<T>** tabla;
+	int numElementos;
+	int table_size;
+public:
+	HashTable(int size = 1500000) {
+		numElementos = 0;
+		table_size = size;
+		tabla = new HashElement * [table_size];
+		for (int i = 0; i < table_size; i++) {
+			tabla[i] = nullptr;
+		}
+	}
+	~HashTable() {
+		for (int i = 0; i < table_size; i++) {
+			if (tabla[i] != nullptr) {
+				delete tabla[i];
+			}
+		}
+		delete[] tabla;
+	}
+	int hashFunction(string key) {
+		string password = key;
+		int hash = 0;
+		for (int i = 0; i < password.length(); i++) {
+			hash = 37 * hash + password[i];
+		}
+		return hash % table_size;
+	}
 
+	int linearProbing(int collisionIndex) {
+		int jump = 1;
+		int newIndex = collisionIndex;
+		while (tabla[newIndex] != nullptr) {
+			newIndex = (collisionIndex + jump) % table_size;
+			jump++;
+		}
+		return newIndex;
+	}
+
+	void insertar(string key, T value) {
+		if (numElementos == table_size) { //ver si tabla esta llena
+			return;
+		}
+		int index = hashFunction(key);
+		if (tabla[index] != nullptr) {//ver si la posicion esta ocupada
+			index = linearProbing(index);
+		}
+		tabla[index] = new HashElement(key, value);
+		numElementos++;
+	}
+
+	T search(string key) {
+		int index = hashFunction(key);
+		if (tabla[index] != nullptr) {//ver si la posicion esta ocupada
+			index = linearProbing(index);
+		}
+		return tabla[index]->value;
+	}
+};
 #endif // !_STRUCTURES_HPP_
